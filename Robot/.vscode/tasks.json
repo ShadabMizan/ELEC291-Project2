@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Flash via UART",
+      "type": "shell",
+      "command": "STM32_Programmer_CLI",
+      "args": [
+        "-c", "port=COM18", "br=115200",
+        "-w", "${workspaceFolder}/build/Debug/Robot.elf", "0x08000000",
+        "-v",
+        "-g", "0x08000000"
+      ],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    }
+  ]
+}
