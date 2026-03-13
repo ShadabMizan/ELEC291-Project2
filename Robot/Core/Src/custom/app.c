@@ -2,6 +2,7 @@
 #include "main.h"
 #include "usart.h"
 #include "vsensor.h"
+#include "pwm.h"
 
 #include <stdio.h>
 
@@ -12,6 +13,12 @@ int _write(int file, char *ptr, int len) {
 
 void app(void) {
     InitVSensor();
+    InitPWM();
+
+    SetDuty(0.5, 0);
+    SetDuty(0.8, 1);
+    SetDuty(0.1, 2);
+    SetDuty(1, 3);
 
     while (1) {
         RunVSensor();

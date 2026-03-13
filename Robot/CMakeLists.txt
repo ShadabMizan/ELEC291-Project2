@@ -47,6 +47,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     Core/Src/custom/app.c
     Core/Src/custom/vsensor.c
+    Core/Src/custom/pwm.c
 )
 
 # Add include paths
