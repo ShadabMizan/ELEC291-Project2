@@ -6,6 +6,7 @@
 #include "pwm.h"
 #include "coindetect.h"
 #include "tof.h"
+#include "jdy40.h"
 
 #include <stdio.h>
 
@@ -17,7 +18,7 @@ int _write(int file, char *ptr, int len) {
 void app(void) {
     InitVSensor();
     InitPWM();
-    InitTOF();
+    // InitTOF();
 
     SetDuty(0.5, 0);
     SetDuty(0.8, 1);
@@ -31,6 +32,7 @@ void app(void) {
         RunCoinDetector();
 
         // printf("Range: %dmm\r\n", GetRange_mm());
+        // JDYGetMsg();
 
         HAL_Delay(500);
     }
@@ -43,5 +45,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == COIN_DETECT_Pin) {
         CoinDetected();
+    }
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+    if (huart == &huart2) {
+        JDYReceive();
     }
 }

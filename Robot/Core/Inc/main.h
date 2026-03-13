@@ -62,6 +62,8 @@ void Error_Handler(void);
 #define COIN_DETECT_Pin GPIO_PIN_11
 #define COIN_DETECT_GPIO_Port GPIOA
 #define COIN_DETECT_EXTI_IRQn EXTI4_15_IRQn
+#define JDY_AT_Pin GPIO_PIN_5
+#define JDY_AT_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
