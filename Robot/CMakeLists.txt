@@ -48,6 +48,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/custom/app.c
     Core/Src/custom/vsensor.c
     Core/Src/custom/pwm.c
+    Core/Src/custom/coindetect.c
 )
 
 # Add include paths

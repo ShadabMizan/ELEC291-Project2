@@ -1,8 +1,10 @@
 #include "app.h"
+#include "coindetect.h"
 #include "main.h"
 #include "usart.h"
 #include "vsensor.h"
 #include "pwm.h"
+#include "coindetect.h"
 
 #include <stdio.h>
 
@@ -22,7 +24,9 @@ void app(void) {
 
     while (1) {
         RunVSensor();
-        printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
+        // printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
+
+        RunCoinDetector();
 
         HAL_Delay(500);
     }
@@ -30,4 +34,10 @@ void app(void) {
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
     VSensorCplt();
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == COIN_DETECT_Pin) {
+        CoinDetected();
+    }
 }

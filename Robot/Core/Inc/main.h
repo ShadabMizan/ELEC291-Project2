@@ -59,6 +59,9 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define STAT_LED_Pin GPIO_PIN_8
 #define STAT_LED_GPIO_Port GPIOA
+#define COIN_DETECT_Pin GPIO_PIN_11
+#define COIN_DETECT_GPIO_Port GPIOA
+#define COIN_DETECT_EXTI_IRQn EXTI4_15_IRQn
 
 /* USER CODE BEGIN Private defines */
 
