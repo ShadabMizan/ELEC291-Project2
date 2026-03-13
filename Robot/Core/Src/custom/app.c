@@ -5,6 +5,7 @@
 #include "vsensor.h"
 #include "pwm.h"
 #include "coindetect.h"
+#include "tof.h"
 
 #include <stdio.h>
 
@@ -16,6 +17,7 @@ int _write(int file, char *ptr, int len) {
 void app(void) {
     InitVSensor();
     InitPWM();
+    InitTOF();
 
     SetDuty(0.5, 0);
     SetDuty(0.8, 1);
@@ -27,6 +29,8 @@ void app(void) {
         // printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
 
         RunCoinDetector();
+
+        // printf("Range: %dmm\r\n", GetRange_mm());
 
         HAL_Delay(500);
     }

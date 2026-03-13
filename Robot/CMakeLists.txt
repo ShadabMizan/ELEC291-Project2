@@ -49,12 +49,16 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/custom/vsensor.c
     Core/Src/custom/pwm.c
     Core/Src/custom/coindetect.c
+    Core/Src/custom/tof.c
+
+    Core/Src/VL53L0x/vl53l0x.c
 )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     Core/Inc/custom
+    Core/Inc/VL53L0x
 )
 
 # Add project symbols (macros)
