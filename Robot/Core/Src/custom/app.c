@@ -1,12 +1,11 @@
 #include "app.h"
-#include "coindetect.h"
 #include "main.h"
+#include "stm32l0xx_hal.h"
 #include "usart.h"
 #include "vsensor.h"
 #include "pwm.h"
-#include "coindetect.h"
 #include "tof.h"
-#include "jdy40.h"
+#include "ir.h"
 
 #include <stdio.h>
 
@@ -19,22 +18,35 @@ void app(void) {
     InitVSensor();
     InitPWM();
     // InitTOF();
+    
+    IRRxInit();
 
     SetDuty(0.5, 0);
     SetDuty(0.8, 1);
     SetDuty(0.1, 2);
     SetDuty(1, 3);
 
+    // char msg[32];
+
     while (1) {
-        RunVSensor();
+        // RunVSensor();
+        printf("Test...\r\n");
         // printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
-
-        RunCoinDetector();
-
         // printf("Range: %dmm\r\n", GetRange_mm());
-        // JDYGetMsg();
+        HAL_Delay(250);
+        IRTx("L");
+        HAL_Delay(250);
+        IRTx("R");
+        HAL_Delay(250);
+        IRTx("F");
+        HAL_Delay(250);
+        IRTx("S");
+        HAL_Delay(250);
+        // if (IR_MessageAvailable()) {
+        //     IR_GetMessage(msg);
 
-        HAL_Delay(500);
+        //     printf("Received: %s\r\n", msg);
+        // }
     }
 }
 
@@ -43,13 +55,13 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == COIN_DETECT_Pin) {
-        CoinDetected();
+    if (GPIO_Pin == IR_TEST_Pin) {
+        IRTx_Callback();
     }
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart == &huart2) {
-        JDYReceive();
+        IRRx_Callback();
     }
 }

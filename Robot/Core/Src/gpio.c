@@ -46,9 +46,6 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(STAT_LED_GPIO_Port, STAT_LED_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(JDY_AT_GPIO_Port, JDY_AT_Pin, GPIO_PIN_RESET);
-
   /*Configure GPIO pin : STAT_LED_Pin */
   GPIO_InitStruct.Pin = STAT_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -56,18 +53,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(STAT_LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : COIN_DETECT_Pin */
-  GPIO_InitStruct.Pin = COIN_DETECT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  /*Configure GPIO pin : IR_TEST_Pin */
+  GPIO_InitStruct.Pin = IR_TEST_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(COIN_DETECT_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : JDY_AT_Pin */
-  GPIO_InitStruct.Pin = JDY_AT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(JDY_AT_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(IR_TEST_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);

@@ -1,8 +1,6 @@
 #include "vsensor.h"
 #include "main.h"
 #include "adc.h"
-#include "stm32l0xx_hal_adc.h"
-#include "stm32l0xx_hal_adc_ex.h"
 
 #define NUM_ADC_MEASUREMENTS    2
 #define VREF        3.311f

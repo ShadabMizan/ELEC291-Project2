@@ -6,7 +6,6 @@
 #define VL53L0X_ADDR        0x52
 
 void InitTOF(void) {
-    HAL_I2C_Init(&hi2c1);
     vl53l0x_init();
 }
 

@@ -1,8 +1,6 @@
 #include "pwm.h"
 #include "main.h"
-#include "stm32l0xx_hal_tim.h"
 #include "tim.h"
-#include <stdio.h>
 
 void InitPWM(void) {
     for (int i = 0; i < 4; i++) {
@@ -27,7 +25,6 @@ void SetDuty(float duty, uint32_t channel) {
         case 2: TIM2->CCR3 = compare; break;
         case 3: TIM2->CCR4 = compare; break;
         default:
-            printf("Invalid PWM Channel: %lu\r\n", channel);
             break;
     }
 }
