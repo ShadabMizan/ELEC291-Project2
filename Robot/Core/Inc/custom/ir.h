@@ -3,17 +3,13 @@
 
 #include <stdint.h>
 
-#define STOP_CMD    0x12
-#define RIGHT_CMD   0x42
-#define LEFT_CMD    0x09
-
-void IRTx_Callback(void);
-void IRTx(char *msg);
+// For Testing
+void IRTxInit(void);
+void IRTx(uint8_t msg);
+void IRTxCallback(void);
 
 void IRRxInit(void);
-
-uint8_t IR_MessageAvailable(void);
-void IR_GetMessage(char *dest);
-void IRRx_Callback(void);
+void IRUpdateCMD(void);
+void IRRxCallback(void);
 
 #endif

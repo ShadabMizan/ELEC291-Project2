@@ -1,8 +1,8 @@
 #include "ir.h"
 #include "main.h"
 #include "pwm.h"
-#include "stm32l0xx_hal_gpio.h"
-#include "stm32l0xx_hal_uart.h"
+#include "stm32l0xx_hal_tim.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -11,46 +11,58 @@
 
 #define IR_RX_BUF_SIZE 24
 
-static uint8_t rxbyte;
-static char ir_rxbuf[IR_RX_BUF_SIZE];
+static uint8_t rxbytes[2];
 
-static volatile uint8_t rxindex = 0;
 static volatile uint8_t rxflag = 0;
 
 // FOR TESTING
-void IRTx(char *msg) {
-    HAL_UART_Transmit(&huart2, (uint8_t *)msg, strlen(msg), 100);
+void IRTxInit(void) {
+    HAL_TIM_PWM_Start(&htim22, TIM_CHANNEL_1);
 }
 
-void IRTx_Callback(void) {
+void IRTx(uint8_t msg) {
+    uint8_t byte = msg;
+    HAL_UART_Transmit(&huart2, &byte, 1, 100);
+}
+
+// Call this in the GPIO ISR. UART_TX is wired directly into the GPIO Interrupt Pin
+void IRTxCallback(void) {
     GPIO_PinState state = HAL_GPIO_ReadPin(IR_TEST_GPIO_Port, IR_TEST_Pin);
     if (state == GPIO_PIN_RESET) {
         // Enable 38kHz PWM
-        SetDuty(0.5, 0);
+        TIM22->CCR1 = 421;
     } else if (state == GPIO_PIN_SET) {
         // Disable
-        SetDuty(0, 0);
+        TIM22->CCR1 = 0;
     }
 }
 
+// IR Receiver
 void IRRxInit(void) {
-    rxindex = 0;
     rxflag = 0;
-    HAL_UART_Receive_IT(&huart2, &rxbyte, 1);
+    HAL_UART_Receive_IT(&huart2, rxbytes, 2);
 }
 
-uint8_t IR_MessageAvailable(void) {
-    return rxflag;
-}
-
-void IR_GetMessage(char *dest) {
+void IRUpdateCMD(void) {
     if (rxflag) {
-        strcpy(dest, ir_rxbuf);
+        uint8_t cmd = rxbytes[0];
         rxflag = 0;
+
+        switch (cmd) {
+            case 'L':   printf("Going Left\r\n"); break;
+            case 'R':   printf("Going Right\r\n"); break;
+            case 'F':   printf("Going Forward\r\n"); break;
+            case 'B':   printf("Going Backward\r\n"); break;
+            case 'S':   printf("Stopping\r\n"); break;
+            default:    printf("Not a CMD: %u\r\n", cmd); break;
+        }
+
+        printf("Value: %u\r\n", rxbytes[1]);
     }
 }
 
-void IRRx_Callback(void) {
-    printf("%c\r\n", (char)rxbyte);
-    HAL_UART_Receive_IT(&huart2, &rxbyte, 1);
+void IRRxCallback(void) {
+    // printf("%c\r\n", (char)rxbyte);
+    rxflag = 1;
+    HAL_UART_Receive_IT(&huart2, rxbytes, 2);
 }

@@ -50,6 +50,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/custom/pwm.c
     Core/Src/custom/tof.c
     Core/Src/custom/ir.c
+    Core/Src/custom/motor.c
 
     Core/Src/VL53L0x/vl53l0x.c
 )
