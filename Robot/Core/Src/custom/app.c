@@ -23,6 +23,8 @@ void app(void) {
     IRTxInit();
     IRRxInit();
 
+    uint32_t delay_ms = 2000;
+
     while (1) {
         // RunVSensor();
         printf("Test...\r\n");
@@ -31,31 +33,34 @@ void app(void) {
         // printf("Range: %dmm\r\n", GetRange_mm());
         
         IRTx('L');
-        IRTx(40);
+        IRTx(100);
         HAL_Delay(1);
         IRUpdateCMD();
-        HAL_Delay(250);
+        HAL_Delay(delay_ms);
 
         IRTx('R');
-        IRTx(30);
+        IRTx(90);
         HAL_Delay(1);
         IRUpdateCMD();
-        HAL_Delay(250);
+        HAL_Delay(delay_ms);
 
-        // GoRight(0.5);
-        // HAL_Delay(500);
+        IRTx('F');
+        IRTx(50);
+        HAL_Delay(1);
+        IRUpdateCMD();
+        HAL_Delay(delay_ms);
 
-        // GoForward(0.8);
-        // HAL_Delay(500);
+        IRTx('B');
+        IRTx(100);
+        HAL_Delay(1);
+        IRUpdateCMD();
+        HAL_Delay(delay_ms);
 
-        // GoBackward(0.2);
-        // HAL_Delay(500);
-
-        // GoLeft(0.1);
-        // HAL_Delay(500);
-
-        // Stop();
-        // HAL_Delay(500)
+        IRTx('S');
+        IRTx(0);
+        HAL_Delay(1);
+        IRUpdateCMD();
+        HAL_Delay(delay_ms);
     }
 }
 
