@@ -5,9 +5,10 @@ void GoRight(float speed);
 void GoForward(float speed);
 
 void GoLeft(float speed);
-
 void GoBackward(float speed);
 
-void Stop(void);
+void StopMotors(void);
+
+void Spin180(void);
 
 #endif

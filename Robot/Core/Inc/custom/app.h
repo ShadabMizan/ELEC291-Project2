@@ -2,6 +2,8 @@
 #define APP_H
 
 #include <stdint.h>
+#include "main.h"
+#include "gpio.h"
 #include "adc.h"
 #include "usart.h"
 

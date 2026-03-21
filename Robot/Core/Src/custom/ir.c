@@ -2,10 +2,10 @@
 #include "main.h"
 #include "motor.h"
 #include "pwm.h"
-#include "stm32l0xx_hal_tim.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "manualmode.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -44,40 +44,17 @@ void IRRxInit(void) {
     HAL_UART_Receive_IT(&huart2, rxbytes, 2);
 }
 
-void IRUpdateCMD(void) {
+// Returns 1 for new data, 0 otherwise.
+uint8_t IRRxGet(uint8_t *cmd, uint8_t *val) {
     if (rxflag) {
-        uint8_t cmd = rxbytes[0];
-        uint8_t val = rxbytes[1];
+        *cmd = rxbytes[0];
+        *val = rxbytes[1];
         rxflag = 0;
 
-        switch (cmd) {
-            case 'L':   
-                printf("Going Left\r\n");
-                GoLeft(val/100.0f); 
-                break;
-            case 'R':   
-                printf("Going Right\r\n");
-                GoRight(val/100.0f);
-                break;
-            case 'F':   
-                printf("Going Forward\r\n"); 
-                GoForward(val/100.0f);
-                break;
-            case 'B':   
-                printf("Going Backward\r\n"); 
-                GoBackward(val/100.0f);
-                break;
-            case 'S':   
-                printf("Stopping\r\n"); 
-                Stop();
-                break;
-            default:    
-                printf("Not a CMD: %u\r\n", cmd); 
-                break;
-        }
-
-        printf("Value: %u\r\n", rxbytes[1]);
+        return 1;
     }
+    
+    return 0;
 }
 
 void IRRxCallback(void) {

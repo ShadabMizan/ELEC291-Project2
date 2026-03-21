@@ -51,6 +51,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Core/Src/custom/tof.c
     Core/Src/custom/ir.c
     Core/Src/custom/motor.c
+    Core/Src/custom/manualmode.c
+    Core/Src/custom/automode.c
 
     Core/Src/VL53L0x/vl53l0x.c
 )

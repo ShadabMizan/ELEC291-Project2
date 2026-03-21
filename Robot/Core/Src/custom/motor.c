@@ -7,6 +7,8 @@
 #define RIGHT_MOTOR_FWD_CH      2
 #define RIGHT_MOTOR_REV_CH      3
 
+#define SPIN180_DURATION_MS     2000
+
 void GoRight(float speed) {
     float duty = 1.0f - speed;
     SetDuty(duty, LEFT_MOTOR_FWD_CH);
@@ -43,10 +45,16 @@ void GoBackward(float speed) {
     SetDuty(duty, RIGHT_MOTOR_REV_CH);
 }
 
-void Stop(void) {
+void StopMotors(void) {
     SetDuty(1, LEFT_MOTOR_FWD_CH);
     SetDuty(1, LEFT_MOTOR_REV_CH);
 
     SetDuty(1, RIGHT_MOTOR_FWD_CH);
     SetDuty(1, RIGHT_MOTOR_REV_CH);
+}
+
+void Spin180(void) {
+    GoLeft(1);
+    HAL_Delay(SPIN180_DURATION_MS);
+    StopMotors();
 }

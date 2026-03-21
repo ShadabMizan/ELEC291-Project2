@@ -1,7 +1,7 @@
 #include "app.h"
 #include "main.h"
+#include "manualmode.h"
 #include "motor.h"
-#include "stm32l0xx_hal.h"
 #include "usart.h"
 #include "vsensor.h"
 #include "pwm.h"
@@ -18,49 +18,31 @@ int _write(int file, char *ptr, int len) {
 void app(void) {
     InitVSensor();
     InitPWM();
-    // InitTOF();
+    // InitTOF();   // Will cause +9% FLASH usage
     
     IRTxInit();
     IRRxInit();
 
-    uint32_t delay_ms = 2000;
+    // char steps[] = {'L', 'R', 'B', 'F', 'S'};
+    // int i = 0;
 
     while (1) {
         // RunVSensor();
-        printf("Test...\r\n");
+        // printf("Test...\r\n");
+
+        // IRTx(steps[i++]);
+        // if (i > sizeof(steps) - 1) {
+        //     i = 0;
+        // }
+
+        // IRTx(80);
+        // HAL_Delay(1);
+
+        ManualMode();
+        HAL_Delay(1);
         
         // printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
         // printf("Range: %dmm\r\n", GetRange_mm());
-        
-        IRTx('L');
-        IRTx(100);
-        HAL_Delay(1);
-        IRUpdateCMD();
-        HAL_Delay(delay_ms);
-
-        IRTx('R');
-        IRTx(90);
-        HAL_Delay(1);
-        IRUpdateCMD();
-        HAL_Delay(delay_ms);
-
-        IRTx('F');
-        IRTx(50);
-        HAL_Delay(1);
-        IRUpdateCMD();
-        HAL_Delay(delay_ms);
-
-        IRTx('B');
-        IRTx(100);
-        HAL_Delay(1);
-        IRUpdateCMD();
-        HAL_Delay(delay_ms);
-
-        IRTx('S');
-        IRTx(0);
-        HAL_Delay(1);
-        IRUpdateCMD();
-        HAL_Delay(delay_ms);
     }
 }
 
