@@ -1,7 +1,9 @@
 #include "app.h"
+#include "automode.h"
 #include "main.h"
 #include "manualmode.h"
 #include "motor.h"
+#include "stm32l0xx_hal_gpio.h"
 #include "usart.h"
 #include "vsensor.h"
 #include "pwm.h"
@@ -26,8 +28,9 @@ void app(void) {
     // char steps[] = {'L', 'R', 'B', 'F', 'S'};
     // int i = 0;
 
+    HAL_GPIO_TogglePin(STAT_LED_GPIO_Port, STAT_LED_Pin);
+    
     while (1) {
-        // RunVSensor();
         // printf("Test...\r\n");
 
         // IRTx(steps[i++]);
@@ -38,8 +41,10 @@ void app(void) {
         // IRTx(80);
         // HAL_Delay(1);
 
-        ManualMode();
+        // ManualMode();
+        AutoMode();
         HAL_Delay(1);
+
         
         // printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
         // printf("Range: %dmm\r\n", GetRange_mm());

@@ -2,7 +2,7 @@
 #include "main.h"
 #include "adc.h"
 
-#define NUM_ADC_MEASUREMENTS    2
+#define NUM_ADC_MEASUREMENTS    3
 #define VREF        3.311f
 
 static volatile uint8_t measurements_cplt_flag = 0;

@@ -1,8 +1,9 @@
 #ifndef VSENSOR_H
 #define VSENSOR_H
 
-#define VSENSOR_CH1     0
-#define VSENSOR_CH2     1
+#define LEFT_COIL       0
+#define RIGHT_COIL      1
+#define CENTRE_COIL     2
 
 #include "adc.h"
 
