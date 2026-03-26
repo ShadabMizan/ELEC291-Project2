@@ -7,9 +7,9 @@
 #include <math.h>
 #include <stdio.h>
 
-#define VCOIL_DIFF_THRESHOLD    0.01f
+#define VCOIL_DIFF_THRESHOLD    0.1f
 
-#define TEST_SPEED              0.2f
+#define TEST_SPEED              0.5f
 
 void AutoMode(void) {
     RunVSensor();
