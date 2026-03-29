@@ -2,6 +2,7 @@
 #include "main.h"
 #include "motor.h"
 #include "pwm.h"
+#include "stm32l0xx_hal_uart.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -15,6 +16,8 @@
 static uint8_t rxbytes[2];
 
 static volatile uint8_t rxflag = 0;
+
+static uint8_t start_flag = 0;
 
 // FOR TESTING
 void IRTxInit(void) {
@@ -41,7 +44,7 @@ void IRTxCallback(void) {
 // IR Receiver
 void IRRxInit(void) {
     rxflag = 0;
-    HAL_UART_Receive_IT(&huart2, rxbytes, 2);
+    HAL_UART_Receive_IT(&huart2, rxbytes, 1);
 }
 
 // Returns 1 for new data, 0 otherwise.
@@ -59,6 +62,16 @@ uint8_t IRRxGet(uint8_t *cmd, uint8_t *val) {
 
 void IRRxCallback(void) {
     // printf("%c\r\n", (char)rxbyte);
-    rxflag = 1;
-    HAL_UART_Receive_IT(&huart2, rxbytes, 2);
+    if (!start_flag) {
+        if (rxbytes[0] == 'N') {
+            start_flag = 1;
+            printf("Started!\r\n");
+            HAL_UART_Receive_IT(&huart2, rxbytes, 2);
+        } else {
+            HAL_UART_Receive_IT(&huart2, rxbytes, 1);
+        }
+    } else {
+        rxflag = 1;
+        HAL_UART_Receive_IT(&huart2, rxbytes, 2);
+    }
 }

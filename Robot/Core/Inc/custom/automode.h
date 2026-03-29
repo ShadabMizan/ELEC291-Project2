@@ -1,6 +1,8 @@
 #ifndef AUTOMODE_H
 #define AUTOMODE_H
 
-void AutoMode(void);
+#include <stdint.h>
+
+void AutoMode(uint8_t path);
 
 #endif

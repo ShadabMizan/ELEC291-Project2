@@ -33,11 +33,6 @@ void ManualMode(void) {
                 printf("Backward\r\n");
                 GoBackward(val/100.0f);
                 break;
-            // case 'P':      // 'P'
-            //     printf("Spinning\r\n");
-            //     Spin180();
-            //     printf("Done Spinning\r\n");
-            //     break;
             default:
                 break;
         }

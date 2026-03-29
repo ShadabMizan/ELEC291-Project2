@@ -20,7 +20,7 @@ int _write(int file, char *ptr, int len) {
 void app(void) {
     InitVSensor();
     InitPWM();
-    // InitTOF();   // Will cause +9% FLASH usage
+    InitTOF();   // Will cause +9% FLASH usage
     
     IRTxInit();
     IRRxInit();
@@ -28,7 +28,8 @@ void app(void) {
     // char steps[] = {'L', 'R', 'B', 'F', 'S'};
     // int i = 0;
 
-    HAL_GPIO_TogglePin(STAT_LED_GPIO_Port, STAT_LED_Pin);
+    // uint8_t cmd, val;
+    HAL_GPIO_WritePin(STAT_LED_GPIO_Port, STAT_LED_Pin, GPIO_PIN_SET);
     
     while (1) {
         // printf("Test...\r\n");
@@ -42,12 +43,21 @@ void app(void) {
         // HAL_Delay(1);
 
         // ManualMode();
-        AutoMode();
-        HAL_Delay(1);
+        AutoMode(1);
+        // if (IRRxGet(&cmd, &val)) {
+        //     printf("CMD: %c, VAL: %u\r\n", (char)cmd, val);
+        // }
+        
+        // float left_coilV = GetVolts(LEFT_COIL);
+        // float right_coilV = GetVolts(RIGHT_COIL);
+        // float centre_coilV = GetVolts(CENTRE_COIL);
 
+        // printf("%.4f, %.4f, %.4f\r\n", left_coilV, right_coilV, centre_coilV);
         
         // printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
         // printf("Range: %dmm\r\n", GetRange_mm());
+
+        // HAL_Delay(1);
     }
 }
 
