@@ -43,7 +43,7 @@ void app(void) {
         // HAL_Delay(1);
 
         // ManualMode();
-        AutoMode(1);
+        AutoMode(0);
         // if (IRRxGet(&cmd, &val)) {
         //     printf("CMD: %c, VAL: %u\r\n", (char)cmd, val);
         // }
@@ -57,7 +57,7 @@ void app(void) {
         // printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
         // printf("Range: %dmm\r\n", GetRange_mm());
 
-        // HAL_Delay(1);
+        HAL_Delay(1);
     }
 }
 

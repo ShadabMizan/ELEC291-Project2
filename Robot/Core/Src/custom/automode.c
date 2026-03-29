@@ -13,10 +13,10 @@
 
 #define STOP_DISTANCE_MM        100.0   
 
-#define AUTOMODE_SPEED          0.5f
+#define AUTOMODE_SPEED          0.75f
 
 #define CENTRECOIL_THRESH       0.1f
-#define CROSSROAD_DELAY_MS      1000
+#define CROSSROAD_DELAY_MS      750
 
 static const char path_table[3][8] = {
     {'F', 'L', 'L', 'F', 'R', 'L', 'R', 'S'},
@@ -55,7 +55,7 @@ void AutoMode(uint8_t path) {
             intersection_cnt++;
             printf("Intersection #%u: %c\r\n", intersection_cnt, cmd);
 
-            HAL_Delay(250);
+            HAL_Delay(100);
 
             switch(cmd) {
                 case 'F':
