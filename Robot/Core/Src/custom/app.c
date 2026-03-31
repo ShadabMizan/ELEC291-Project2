@@ -3,17 +3,23 @@
 #include "main.h"
 #include "manualmode.h"
 #include "motor.h"
+#include "stm32l0xx_hal.h"
 #include "stm32l0xx_hal_gpio.h"
 #include "usart.h"
 #include "vsensor.h"
 #include "pwm.h"
 #include "tof.h"
 #include "ir.h"
+#include "servo.h"
+#include "sonar.h"
 
 #include <stdio.h>
 
+#define MANUAL_MODE     0
+#define AUTO_MODE       1
+
 int _write(int file, char *ptr, int len) {
-    HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, 100);
     return len;
 }
 
@@ -22,41 +28,40 @@ void app(void) {
     InitPWM();
     InitTOF();   // Will cause +9% FLASH usage
     
-    IRTxInit();
+    // IRTxInit();
     IRRxInit();
 
-    // char steps[] = {'L', 'R', 'B', 'F', 'S'};
-    // int i = 0;
+    ServoInit();
+    ServoSetAngle(90);
 
-    // uint8_t cmd, val;
+    uint8_t cmd = 'S';
+    uint8_t val = 0;
+
     HAL_GPIO_WritePin(STAT_LED_GPIO_Port, STAT_LED_Pin, GPIO_PIN_SET);
+    printf("Starting!\r\n");
+
+    uint8_t mode = MANUAL_MODE;
+    uint8_t path = 0;
     
     while (1) {
-        // printf("Test...\r\n");
+        if (IRRxGet(&cmd, &val)) {
+            printf("CMD: %c, VAL: %u\r\n", (char)cmd, val);
+            if (cmd == 'M') {
+                if (mode == MANUAL_MODE) {
+                    mode = AUTO_MODE;
+                } else {
+                    mode = MANUAL_MODE;
+                }
+            }
+        }
 
-        // IRTx(steps[i++]);
-        // if (i > sizeof(steps) - 1) {
-        //     i = 0;
-        // }
-
-        // IRTx(80);
-        // HAL_Delay(1);
-
-        // ManualMode();
-        AutoMode(0);
-        // if (IRRxGet(&cmd, &val)) {
-        //     printf("CMD: %c, VAL: %u\r\n", (char)cmd, val);
-        // }
+        if (mode == MANUAL_MODE) {
+            ManualMode(cmd, val);
+        } else if (mode == AUTO_MODE) {
+            AutoMode(path);
+        }
         
-        // float left_coilV = GetVolts(LEFT_COIL);
-        // float right_coilV = GetVolts(RIGHT_COIL);
-        // float centre_coilV = GetVolts(CENTRE_COIL);
-
-        // printf("%.4f, %.4f, %.4f\r\n", left_coilV, right_coilV, centre_coilV);
-        
-        // printf("CH0: %.2f\nCH1: %.2f\r\n", GetVolts(0), GetVolts(1));
-        // printf("Range: %dmm\r\n", GetRange_mm());
-
+        // Sonar();
         HAL_Delay(1);
     }
 }

@@ -17,6 +17,7 @@
 
 #define CENTRECOIL_THRESH       0.1f
 #define CROSSROAD_DELAY_MS      750
+#define CROSSROAD_DETECTED_DELAY_MS     100
 
 static const char path_table[3][8] = {
     {'F', 'L', 'L', 'F', 'R', 'L', 'R', 'S'},
@@ -55,7 +56,7 @@ void AutoMode(uint8_t path) {
             intersection_cnt++;
             printf("Intersection #%u: %c\r\n", intersection_cnt, cmd);
 
-            HAL_Delay(100);
+            HAL_Delay(CROSSROAD_DETECTED_DELAY_MS);
 
             switch(cmd) {
                 case 'F':

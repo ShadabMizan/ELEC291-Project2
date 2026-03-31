@@ -2,7 +2,6 @@
 #include "main.h"
 #include "motor.h"
 #include "pwm.h"
-#include "stm32l0xx_hal_uart.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -21,6 +20,9 @@ static uint8_t start_flag = 0;
 
 // FOR TESTING
 void IRTxInit(void) {
+    htim22.Init.Period = 842 - 1;
+    HAL_TIM_Base_Init(&htim22);
+    
     HAL_TIM_PWM_Start(&htim22, TIM_CHANNEL_1);
 }
 

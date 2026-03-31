@@ -1,6 +1,8 @@
 #ifndef MANUALMODE_H
 #define MANUALMODE_H
 
-void ManualMode(void);
+#include <stdint.h>
+
+void ManualMode(uint8_t cmd, uint8_t val);
 
 #endif
