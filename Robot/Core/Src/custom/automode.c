@@ -1,13 +1,12 @@
 #include "automode.h"
 #include "motor.h"
-#include "stm32l0xx_hal.h"
-#include "stm32l0xx_hal_gpio.h"
 #include "vsensor.h"
 #include "main.h"
 #include "tof.h"
 
 #include <math.h>
 #include <stdio.h>
+#include <sys/_intsup.h>
 
 #define VCOIL_DIFF_THRESHOLD    0.1f
 
@@ -15,9 +14,9 @@
 
 #define AUTOMODE_SPEED          0.75f
 
-#define CENTRECOIL_THRESH       0.1f
+#define CENTRECOIL_THRESH       0.5f
 #define CROSSROAD_DELAY_MS      750
-#define CROSSROAD_DETECTED_DELAY_MS     100
+#define CROSSROAD_DETECTED_DELAY_MS     200
 
 static const char path_table[3][8] = {
     {'F', 'L', 'L', 'F', 'R', 'L', 'R', 'S'},
@@ -27,8 +26,16 @@ static const char path_table[3][8] = {
 
 static uint8_t intersection_cnt = 0;
 static uint8_t at_intersection = 0;
+static uint8_t done = 0;
 
-void AutoMode(uint8_t path) {
+void AutoMode(uint8_t path, uint8_t rst) {
+    if (rst) {
+        intersection_cnt = 0;
+        done = 0;
+    } else if (done) {
+        StopMotors();
+    }
+
     RunVSensor();
 
     float left_coilV = GetVolts(LEFT_COIL);
@@ -37,12 +44,10 @@ void AutoMode(uint8_t path) {
 
     float collision_dist_mm = GetRange_mm();
 
-    printf("L: %.4fV, R: %.4fV, C: %.4fV\r\n", left_coilV, right_coilV, centre_coilV);
-    printf("D: %.4fmm\r\n", collision_dist_mm);
+    // printf("L: %.4fV, R: %.4fV, C: %.4fV\r\n", left_coilV, right_coilV, centre_coilV);
+    // printf("D: %.4fmm\r\n", collision_dist_mm);
 
     float coil_diff = left_coilV - right_coilV;
-
-    float speed = AUTOMODE_SPEED;
 
     if (collision_dist_mm <= STOP_DISTANCE_MM && collision_dist_mm > 0) {
         StopMotors();
@@ -54,7 +59,7 @@ void AutoMode(uint8_t path) {
             at_intersection = 1;
             char cmd = path_table[path][intersection_cnt];
             intersection_cnt++;
-            printf("Intersection #%u: %c\r\n", intersection_cnt, cmd);
+            printf("Path #%u, Intersection #%u: %c\r\n", path, intersection_cnt, cmd);
 
             HAL_Delay(CROSSROAD_DETECTED_DELAY_MS);
 
@@ -79,24 +84,25 @@ void AutoMode(uint8_t path) {
                     break;
                 case 'S': 
                     StopMotors();
-                    while (1) {
-                        printf("DONE!\r\n");
-                        HAL_GPIO_TogglePin(STAT_LED_GPIO_Port, STAT_LED_Pin);
-                        HAL_Delay(100);
-                    }
+                    done = 1;
                     break;
             }
-        }        
+            return;
+        }
+
+        return;    
     } else {
         at_intersection = 0;
     }
 
     if (fabsf(coil_diff) < VCOIL_DIFF_THRESHOLD) {
-        GoForward(speed);
+        GoForward(AUTOMODE_SPEED);
     } else if (coil_diff > 0.0f) {
-        GoRight(speed);
+        GoRight(AUTOMODE_SPEED);
+        // GoTRDiagonal(AUTOMODE_SPEED);
     } else {
-        GoLeft(speed);
+        GoLeft(AUTOMODE_SPEED);
+        // GoTLDiagonal(AUTOMODE_SPEED);
     }
 }
 

@@ -10,8 +10,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#define IR_RX_BUF_SIZE 24
-
 static uint8_t rxbytes[2];
 
 static volatile uint8_t rxflag = 0;
@@ -63,11 +61,10 @@ uint8_t IRRxGet(uint8_t *cmd, uint8_t *val) {
 }
 
 void IRRxCallback(void) {
-    // printf("%c\r\n", (char)rxbyte);
     if (!start_flag) {
         if (rxbytes[0] == 'N') {
             start_flag = 1;
-            printf("Started!\r\n");
+            printf("Started IR!\r\n");
             HAL_UART_Receive_IT(&huart2, rxbytes, 2);
         } else {
             HAL_UART_Receive_IT(&huart2, rxbytes, 1);

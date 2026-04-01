@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-void AutoMode(uint8_t path);
+void AutoMode(uint8_t path, uint8_t rst);
 
 #endif
