@@ -16,7 +16,7 @@
 
 #define CENTRECOIL_THRESH       0.4f
 #define CROSSROAD_DELAY_MS      750
-#define CROSSROAD_DETECTED_DELAY_MS     200
+#define CROSSROAD_DETECTED_DELAY_MS     150
 
 static const char path_table[3][8] = {
     {'F', 'L', 'L', 'F', 'R', 'L', 'R', 'S'},

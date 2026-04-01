@@ -61,14 +61,9 @@ uint8_t IRRxGet(uint8_t *cmd, uint8_t *val) {
 }
 
 void IRRxCallback(void) {
-    if (!start_flag) {
-        if (rxbytes[0] == 'N') {
-            start_flag = 1;
-            printf("Started IR!\r\n");
-            HAL_UART_Receive_IT(&huart2, rxbytes, 2);
-        } else {
-            HAL_UART_Receive_IT(&huart2, rxbytes, 1);
-        }
+    if (rxbytes[0] == 'N') {
+        printf("Started IR!\r\n");
+        HAL_UART_Receive_IT(&huart2, rxbytes, 2);
     } else {
         rxflag = 1;
         HAL_UART_Receive_IT(&huart2, rxbytes, 2);
