@@ -19,6 +19,8 @@
 #define AUTO_MODE       1
 #define SONAR_MODE      2
 
+static uint8_t sonar_btn_flag = 0;
+
 int _write(int file, char *ptr, int len) {
     HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, 100);
     return len;
@@ -46,6 +48,16 @@ void app(void) {
     uint8_t path_rst = 0;
     
     while (1) {
+        if (sonar_btn_flag) {
+            HAL_Delay(250);
+            sonar_btn_flag = 0;
+            if (mode != SONAR_MODE) {
+                mode = SONAR_MODE;
+            } else {
+                mode = MANUAL_MODE;
+            }
+        }
+
         if (IRRxGet(&cmd, &val)) {
             printf("CMD: %c, VAL: %u\r\n", (char)cmd, val);
             if (cmd == 'M') {
@@ -54,6 +66,7 @@ void app(void) {
                 printf("Entering Manual Mode\r\n");
             } else if (cmd == 'A') {
                 mode = AUTO_MODE;
+                ServoSetAngle(90);
                 printf("Entering Automatic Mode with Path %u\r\n", val);
                 path = val;
                 path_rst = 1;
@@ -65,9 +78,10 @@ void app(void) {
         } else if (mode == AUTO_MODE) {
             AutoMode(path, path_rst);
             path_rst = 0;
+        } else if (mode == SONAR_MODE) {
+            Sonar();
         }
-        
-        // Sonar();
+
         HAL_Delay(1);
     }
 }
@@ -79,6 +93,8 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == IR_TEST_Pin) {
         IRTxCallback();
+    } else if (GPIO_Pin == SONAR_BTN_Pin) {
+        sonar_btn_flag = 1;
     }
 }
 

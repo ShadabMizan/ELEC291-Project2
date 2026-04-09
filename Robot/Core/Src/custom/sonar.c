@@ -7,23 +7,23 @@
 
 void Sonar(void) {
     ServoSetAngle(0);
-    HAL_Delay(1000);
+    HAL_Delay(500);
 
-    uint32_t t0 = HAL_GetTick();
     printf("SONAR BEGIN\r\n");
 
     // Sweep 0° → 180°
     for (uint8_t angle = 0; angle <= 180; angle++) {
         ServoSetAngle(angle);
         int distance = GetRange_mm();
-        uint32_t t_ms = HAL_GetTick() - t0;
+        // max distance at 1000 if there is -1 (read error) or -2 (out of range error)
+        if (distance < 0) distance = 1000;      
 
-        printf("SONAR:%lu,%d,%u\r\n", t_ms, distance, angle);
+        printf("SONAR:%d,%u\r\n", distance, angle);
         HAL_Delay(10);
     }
 
     printf("SONAR END\r\n");
 
     ServoSetAngle(0);
-    HAL_Delay(1000);
+    HAL_Delay(500);
 }

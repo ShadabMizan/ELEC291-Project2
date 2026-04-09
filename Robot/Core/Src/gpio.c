@@ -53,6 +53,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(STAT_LED_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : SONAR_BTN_Pin */
+  GPIO_InitStruct.Pin = SONAR_BTN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(SONAR_BTN_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : IR_TEST_Pin */
   GPIO_InitStruct.Pin = IR_TEST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;

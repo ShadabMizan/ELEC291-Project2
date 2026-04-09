@@ -14,7 +14,7 @@
 
 #define AUTOMODE_SPEED          0.75f
 
-#define CENTRECOIL_THRESH       0.4f
+#define CENTRECOIL_THRESH       0.5f
 #define CROSSROAD_DELAY_MS      750
 #define CROSSROAD_DETECTED_DELAY_MS     150
 

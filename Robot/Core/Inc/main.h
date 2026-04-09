@@ -59,6 +59,9 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define STAT_LED_Pin GPIO_PIN_8
 #define STAT_LED_GPIO_Port GPIOA
+#define SONAR_BTN_Pin GPIO_PIN_11
+#define SONAR_BTN_GPIO_Port GPIOA
+#define SONAR_BTN_EXTI_IRQn EXTI4_15_IRQn
 #define IR_TEST_Pin GPIO_PIN_12
 #define IR_TEST_GPIO_Port GPIOA
 #define IR_TEST_EXTI_IRQn EXTI4_15_IRQn
